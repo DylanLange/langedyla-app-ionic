@@ -19,21 +19,10 @@ export class PokemonServiceProvider {
 		console.log('Hello PokemonServiceProvider Provider');
 	}
 
-	// getPokemon(id: String, callback: (Pokemon) => Void) {
-	// 	return this.http
-	// 		.get(endpoint + "pokemon/" + id)
-	// 		.map(res => res.json().main)
-	// 		.subscribe(res => {
-	// 			console.log(res);
-	// 			callback(res);
-	// 		});
-	// }
-
-	getPokemon(pokemonId: String) {
+	getPokemonById(pokemonId: String) {
 		return new Promise(resolve => {
 			this.http
 				.get(this.endpoint + "pokemon/" + pokemonId)
-				// .map(res => res.json)
 				.subscribe(res => {
 					console.log(res);
 					resolve(res);

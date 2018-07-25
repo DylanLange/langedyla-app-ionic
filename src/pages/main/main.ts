@@ -17,7 +17,9 @@ export class MainPage implements View {
   favouritesRoot = FavouritesPage;
   accountRoot = AccountPage;
 
-  constructor(public navCtrl: NavController) {}
+  constructor(public navCtrl: NavController) {
+    
+  }
 
   ionViewDidLoad() {
 

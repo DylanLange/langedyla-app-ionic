@@ -17,21 +17,45 @@ import { Pokemon } from '../../data/models/Pokemon';
 })
 export class PokedexPage {
 
+  searchQuery: String = "";
+  presenter: Presenter;
   pokemonServiceProvider: PokemonServiceProvider;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public pokemonServiceProvider: PokemonServiceProvider) {
     this.pokemonServiceProvider = pokemonServiceProvider;
+    this.presenter = new PokedexPresenter(this);
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PokedexPage');
-    this.pokemonServiceProvider.getPokemon("100").then(
-        data => {
-          let pokemon = data as Pokemon;
-          console.log("Received in pokedex: " + pokemon);
+    this.pokemonServiceProvider.getPokemonById("100").then(
+        pokemon => {
           console.log(pokemon.name);
         }
       )
   }
 
+  onInput(event: any) {
+    this.presenter.searchEntered(this.searchQuery);
+  }
+
+}
+
+class PokedexPresenter implements Presenter {
+
+  constructor(view: PokedexPage) {
+
+  }
+
+  searchEntered(query: String) {
+    console.log(query);
+  }
+
+}
+
+interface View {
+
+}
+
+interface Presenter {
+  searchEntered(query: String);
 }
