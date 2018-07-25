@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
+import { Pokemon } from '../../data/models/Pokemon';
 
 /**
  * Generated class for the PokedexPage page.
@@ -15,11 +17,21 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PokedexPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  pokemonServiceProvider: PokemonServiceProvider;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public pokemonServiceProvider: PokemonServiceProvider) {
+    this.pokemonServiceProvider = pokemonServiceProvider;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PokedexPage');
+    this.pokemonServiceProvider.getPokemon("100").then(
+        data => {
+          let pokemon = data as Pokemon;
+          console.log("Received in pokedex: " + pokemon);
+          console.log(pokemon.name);
+        }
+      )
   }
 
 }

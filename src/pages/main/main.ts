@@ -11,7 +11,7 @@ import { AccountPage } from '../account/account';
 })
 export class MainPage implements View {
 
-	presenter = MainPresenter(this);
+	presenter = new MainPresenter(this);
 
   pokedexRoot = PokedexPage;
   favouritesRoot = FavouritesPage;
@@ -36,7 +36,7 @@ export class MainPage implements View {
   }
 
   ionViewWillUnload() {
-  	
+
   }
 
 }
