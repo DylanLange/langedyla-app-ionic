@@ -28,6 +28,7 @@ export class PokemonServiceProvider {
 					resolve(res);
 				}, error => {
 					console.log(error);
+					resolve(error);
 				});
 		})
 	}

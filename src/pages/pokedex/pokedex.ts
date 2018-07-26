@@ -27,9 +27,6 @@ export class PokedexPage {
     this.presenter = new PokedexPresenter(this, pokemonServiceProvider);
 
     this.loadingCtrl = loadingCtrl;
-    this.loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
   }
 
   search(event: any) {
@@ -37,6 +34,9 @@ export class PokedexPage {
   }
 
   showLoader() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });//reinitialise because you can't reuse them apparently
     this.loading.present();
   }
 
@@ -59,12 +59,18 @@ class PokedexPresenter implements Presenter {
   searchEntered(query: String) {
     console.log(query);
     this.view.showLoader();
-    this.pokemonServiceProvider.getPokemonByIdOrName(query).then(
-        pokemon => {
-          this.view.hideLoader();
-          console.log(pokemon.name);
-        }
-      )
+    this.pokemonServiceProvider.getPokemonByIdOrName(query)
+      .then(
+          pokemon => {
+            this.view.hideLoader();
+            console.log(pokemon.name);
+            return pokemon;
+          }
+        )
+      .catch(error => {
+        this.view.hideLoader();
+        console.log(error); 
+      });
   }
 
 }
