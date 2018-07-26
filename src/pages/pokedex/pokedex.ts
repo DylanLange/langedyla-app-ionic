@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
 import { Pokemon } from '../../data/models/Pokemon';
 
@@ -17,43 +17,61 @@ import { Pokemon } from '../../data/models/Pokemon';
 })
 export class PokedexPage {
 
+  loading: LoadingController;
+
   searchQuery: String = "";
   presenter: Presenter;
-  pokemonServiceProvider: PokemonServiceProvider;
+  loadingCtrl: LoadingController;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public pokemonServiceProvider: PokemonServiceProvider) {
-    this.pokemonServiceProvider = pokemonServiceProvider;
-    this.presenter = new PokedexPresenter(this);
+  constructor(public navCtrl: NavController, public navParams: NavParams, public pokemonServiceProvider: PokemonServiceProvider, public loadingCtrl: LoadingController) {
+    this.presenter = new PokedexPresenter(this, pokemonServiceProvider);
+
+    this.loadingCtrl = loadingCtrl;
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
   }
 
-  ionViewDidLoad() {
-    this.pokemonServiceProvider.getPokemonById("100").then(
-        pokemon => {
-          console.log(pokemon.name);
-        }
-      )
-  }
-
-  onInput(event: any) {
+  search(event: any) {
     this.presenter.searchEntered(this.searchQuery);
+  }
+
+  showLoader() {
+    this.loading.present();
+  }
+
+  hideLoader() {
+    this.loading.dismiss();
   }
 
 }
 
 class PokedexPresenter implements Presenter {
 
-  constructor(view: PokedexPage) {
+  view: View;
+  pokemonServiceProvider: PokemonServiceProvider;
 
+  constructor(view: PokedexPage, public pokemonServiceProvider: PokemonServiceProvider) {
+    this.view = view;
+    this.pokemonServiceProvider = pokemonServiceProvider;
   }
 
   searchEntered(query: String) {
     console.log(query);
+    this.view.showLoader();
+    this.pokemonServiceProvider.getPokemonByIdOrName(query).then(
+        pokemon => {
+          this.view.hideLoader();
+          console.log(pokemon.name);
+        }
+      )
   }
 
 }
 
 interface View {
-
+  showLoader();
+  hideLoader();
 }
 
 interface Presenter {

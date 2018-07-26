@@ -15,7 +15,7 @@
 <ion-content padding>
 	<ion-searchbar
 	  [(ngModel)]="searchQuery"
-	  (ionInput)="onInput($event)">
+	  (change)="search($event)">
 	</ion-searchbar>
 	<p>This is the pokedex screen</p>
 </ion-content>

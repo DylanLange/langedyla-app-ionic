@@ -19,10 +19,10 @@ export class PokemonServiceProvider {
 		console.log('Hello PokemonServiceProvider Provider');
 	}
 
-	getPokemonById(pokemonId: String) {
+	getPokemonByIdOrName(pokemonIdOrName: String) {
 		return new Promise(resolve => {
 			this.http
-				.get(this.endpoint + "pokemon/" + pokemonId)
+				.get(this.endpoint + "pokemon/" + pokemonIdOrName)
 				.subscribe(res => {
 					console.log(res);
 					resolve(res);
