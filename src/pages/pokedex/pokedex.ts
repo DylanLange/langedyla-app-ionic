@@ -19,6 +19,7 @@ export class PokedexPage {
 
   loading: LoadingController;
 
+  imgUrl: String = "";
   searchQuery: String = "";
   presenter: Presenter;
   loadingCtrl: LoadingController;
@@ -44,6 +45,11 @@ export class PokedexPage {
     this.loading.dismiss();
   }
 
+  setImageUrl(imageUrl: String) {
+    this.imgUrl = imageUrl;
+    console.log("Setting image url to " + this.imgUrl);
+  }
+
 }
 
 class PokedexPresenter implements Presenter {
@@ -63,7 +69,9 @@ class PokedexPresenter implements Presenter {
       .then(
           pokemon => {
             this.view.hideLoader();
-            console.log(pokemon.name);
+            if(pokemon.sprites) {
+              this.view.setImageUrl(pokemon.sprites.front_default);
+            }
             return pokemon;
           }
         )
@@ -78,6 +86,7 @@ class PokedexPresenter implements Presenter {
 interface View {
   showLoader();
   hideLoader();
+  setImageUrl(imageUrl: String);
 }
 
 interface Presenter {
