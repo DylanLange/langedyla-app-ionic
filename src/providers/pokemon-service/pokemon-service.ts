@@ -20,9 +20,25 @@ export class PokemonServiceProvider {
 	}
 
 	getPokemonByIdOrName(pokemonIdOrName: String) {
+		console.log("in service: " + pokemonIdOrName);
 		return new Promise(resolve => {
 			this.http
 				.get(this.endpoint + "pokemon/" + pokemonIdOrName)
+				.subscribe(res => {
+					console.log(res);
+					resolve(res);
+				}, error => {
+					console.log(error);
+					resolve(error);
+				});
+		})
+	}
+
+	getFromEndpoint(endpoint: String) {
+		console.log("GET from endpoint " + endpoint);
+		return new Promise(resolve => {
+			this.http
+				.get(endpoint)
 				.subscribe(res => {
 					console.log(res);
 					resolve(res);

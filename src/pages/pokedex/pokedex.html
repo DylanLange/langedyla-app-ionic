@@ -17,8 +17,33 @@
 	  [(ngModel)]="searchQuery"
 	  (change)="search($event)">
 	</ion-searchbar>
-	<p>This is the pokedex screen</p>
+	<h1 
+		*ngIf="pokemon !== undefined"
+		text-center>
+		{{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}
+	</h1>
 
-	<!-- <img width=250, height=250, [src]="imgUrl"> -->
-	<img [src]="imgUrl">
+	<div class="top_container">
+		<img 
+			class="pokemon_image" 
+			*ngIf="pokemon !== undefined" 
+			[src]="pokemon.sprites.front_default">
+
+		<div class="height_weight_container"
+			padding>
+			<p class="height_weight_content" 
+				*ngIf="pokemon !== undefined">
+				Weight: {{pokemon.weight}}
+			</p>
+			<p class="height_weight_content" 
+				*ngIf="pokemon !== undefined">
+				Height: {{pokemon.height}}
+			</p>
+		</div>
+	</div>
+
+	<p>
+		{{descriptionText}}
+	</p>
+
 </ion-content>
