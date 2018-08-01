@@ -2,6 +2,24 @@ page-pokedex {
 
 }
 
+.search_favourite_container {
+	display: table;
+	vertical-align: middle;
+    width: 100%;
+}
+
+.searchbar {
+	display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.favourite {
+	display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+}
+
 .top_container {
 	
 }

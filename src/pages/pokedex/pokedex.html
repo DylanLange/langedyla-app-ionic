@@ -13,10 +13,18 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-searchbar
-	  [(ngModel)]="searchQuery"
-	  (change)="search($event)">
-	</ion-searchbar>
+	<div class="search_favourite_container">
+		<ion-searchbar
+			class="searchbar"
+			[(ngModel)]="searchQuery"
+			(change)="search($event)">
+		</ion-searchbar>
+		<button ion-button icon-only round
+			class="favourite">
+			<ion-icon name="star"></ion-icon>
+		</button>
+	</div>
+	
 	<h1 
 		*ngIf="pokemon !== undefined"
 		text-center>
