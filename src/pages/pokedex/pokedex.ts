@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
 import { Pokemon } from '../../data/models/Pokemon';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the PokedexPage page.
@@ -21,12 +22,13 @@ export class PokedexPage {
 
   pokemon: Object;
   descriptionText: String = "";
+  favouriteBtnColor = "not_favourite";
   searchQuery: String = "";
   presenter: Presenter;
   loadingController: LoadingController;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public pokemonServiceProvider: PokemonServiceProvider, public loadingCtrl: LoadingController) {
-    this.presenter = new PokedexPresenter(this, pokemonServiceProvider);
+  constructor(public navCtrl: NavController, public navParams: NavParams, public pokemonServiceProvider: PokemonServiceProvider, public loadingCtrl: LoadingController, public storage: Storage) {
+    this.presenter = new PokedexPresenter(this, pokemonServiceProvider, storage);
 
     this.loadingController = loadingCtrl;
   }
@@ -46,9 +48,13 @@ export class PokedexPage {
     this.loading.dismiss();
   }
 
-  setPokemon(pokemon: Object, flavorText: String) {
+  setPokemonData(pokemon: Object, flavorText: String) {
     this.pokemon = pokemon;
-    this.descriptionText = flavorText;//species.flavor_text_entries[2].flavor_text;
+    this.descriptionText = flavorText;
+  }
+
+  setIsFavourited(isFavourited: Boolean) {
+    this.favouriteBtnColor = isFavourited ? "favourite" : "not_favourite";
   }
 
 }
@@ -57,9 +63,14 @@ class PokedexPresenter implements Presenter {
 
   view: View;
   pokemonServiceProvider: PokemonServiceProvider;
+  storage: Storage;
+  currentPokemon: Object;
 
-  constructor(view: PokedexPage, public pokemonServiceProvider: PokemonServiceProvider) {
+  favouritesStorageKey: String = "favourites";
+
+  constructor(view: PokedexPage, pokemonServiceProvider: PokemonServiceProvider, storage: Storage) {
     this.view = view;
+    this.storage = storage;
     this.pokemonServiceProvider = pokemonServiceProvider;
   }
 
@@ -69,12 +80,48 @@ class PokedexPresenter implements Presenter {
     this.fetchPokemon(query);
   }
 
+  favouriteClicked() {
+    this.view.showLoader();
+
+    this.storage.get(this.favouritesStorageKey)
+      .then((_favourites) => {
+        var localSavedFavourites = JSON.parse(_favourites);
+        var favourites;
+        if(localSavedFavourites == null) {
+          favourites = new Array();
+        } else {
+          if(localSavedFavourites.constructor === Array) {
+            favourites = localSavedFavourites;
+          } else {
+            favourites = [localSavedFavourites];
+          }
+        }
+        var isFavourited = favourites.includes(this.currentPokemon.id);
+
+        var newFavourites: Array<String>;
+        if(isFavourited) {
+          newFavourites = favourites.filter(id => id != this.currentPokemon.id);
+          if(newFavourites.constructor !== Array) {
+            newFavourites = [newFavourites];
+          }
+        } else {
+          newFavourites = favourites.concat([this.currentPokemon.id]);
+        }
+
+        this.storage.set(this.favouritesStorageKey, JSON.stringify(newFavourites));
+        this.view.setIsFavourited(!isFavourited);
+
+        this.view.hideLoader();
+      });
+  }
+
   fetchPokemon(pokemonIdOrName: String) {
     this.pokemonServiceProvider.getPokemonByIdOrName(pokemonIdOrName)
       .then(
           pokemon => {
             if(pokemon !== undefined) {
               console.log("got pokemon " + pokemon);
+              this.currentPokemon = pokemon;
               this.fetchSpecies(pokemon);
             }
             return pokemon;
@@ -94,9 +141,8 @@ class PokedexPresenter implements Presenter {
             this.view.hideLoader();
             if(species !== undefined) {
               var englishFlavour = this.englishFlavour(species.flavor_text_entries);
-              console.log("got species " + species);
-              console.log("flavor: " + englishFlavour);
-              this.view.setPokemon(pokemon, englishFlavour.flavor_text);
+              this.view.setPokemonData(pokemon, englishFlavour.flavor_text);
+              this.updateFavouritedIcon();
             }
             return species;
           }
@@ -104,6 +150,25 @@ class PokedexPresenter implements Presenter {
       .catch(error => {
         this.view.hideLoader();
         console.log(error); 
+      });
+  }
+
+  updateFavouritedIcon() {
+    this.storage.get(this.favouritesStorageKey)
+      .then((_favourites) => {
+        var localSavedFavourites = JSON.parse(_favourites);
+        var favourites;
+        if(localSavedFavourites == null) {
+          favourites = new Array();
+        } else {
+          if(localSavedFavourites.constructor === Array) {
+            favourites = localSavedFavourites;
+          } else {
+            favourites = [localSavedFavourites];
+          }
+        }
+        var isFavourited = favourites.includes(this.currentPokemon.id);
+        this.view.setIsFavourited(isFavourited);
       });
   }
 
@@ -121,9 +186,11 @@ class PokedexPresenter implements Presenter {
 interface View {
   showLoader();
   hideLoader();
-  setPokemon(pokemon: Object, species: Object);
+  setPokemonData(pokemon: Object, species: Object);
+  setIsFavourited(isFavourited: Boolean);
 }
 
 interface Presenter {
   searchEntered(query: String);
+  favouriteClicked();
 }

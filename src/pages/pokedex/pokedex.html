@@ -20,8 +20,12 @@
 			(change)="search($event)">
 		</ion-searchbar>
 		<button ion-button icon-only round
+			[hidden]="pokemon == undefined"
+			(click)='presenter.favouriteClicked();'
 			class="favourite">
-			<ion-icon name="star"></ion-icon>
+			<ion-icon 
+				name="star"
+				color="{{favouriteBtnColor}}"></ion-icon>
 		</button>
 	</div>
 	

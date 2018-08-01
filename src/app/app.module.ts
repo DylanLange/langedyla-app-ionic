@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 
+import { IonicStorageModule } from '@ionic/storage';
+
 import { MyApp } from './app.component';
 import { MainPage } from '../pages/main/main';
 import { HomePage } from '../pages/home/home';
@@ -28,7 +30,8 @@ import { PokemonServiceProvider } from '../providers/pokemon-service/pokemon-ser
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
