@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { MyDataProvider } from '../../providers/my-data/my-data';
+import Favourite from '../../data/models/favourite';
 
 /**
  * Generated class for the FavouritesPage page.
@@ -15,11 +17,46 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class FavouritesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  presenter: FavouritesPresenter;
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public myDataProvider: MyDataProvider
+  ) {
+    this.presenter = new FavouritesPresenter(myDataProvider);
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad FavouritesPage');
+  ionViewDidEnter() {
+    this.presenter.viewDidEnter();
   }
 
+}
+
+class FavouritesPresenter implements Presenter {
+
+  myDataProvider: MyDataProvider;
+
+  constructor(
+    myDataProvider: MyDataProvider
+  ) {
+    this.myDataProvider = myDataProvider;
+  }
+
+  viewDidEnter() {
+    this.myDataProvider.getFavourites()
+      .then((favourites) => {
+        console.log("loaded favourites in other tab");
+        console.log(favourites);
+      });
+  }
+
+}
+
+interface View {
+
+}
+
+interface Presenter {
+  viewDidEnter();
 }

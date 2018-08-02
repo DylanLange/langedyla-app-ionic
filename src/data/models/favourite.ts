@@ -1,4 +1,4 @@
-export class Favourite {
+export default class Favourite {
 
 	id: Number;
 	name: String;

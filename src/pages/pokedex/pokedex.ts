@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
-import { Pokemon } from '../../data/models/Pokemon';
-import { Storage } from '@ionic/storage';
 import { MyDataProvider } from '../../providers/my-data/my-data';
-import { Favourite } from '../../data/models/favourite';
 import { pokemonExistsInFavouriteArray } from '../../utils/utils';
+import Favourite from '../../data/models/favourite';
 
 /**
  * Generated class for the PokedexPage page.
@@ -35,10 +33,9 @@ export class PokedexPage {
     public navParams: NavParams,
     public pokemonServiceProvider: PokemonServiceProvider,
     public loadingCtrl: LoadingController,
-    public storage: Storage,
     public myDataProvider: MyDataProvider
   ) {
-    this.presenter = new PokedexPresenter(this, pokemonServiceProvider, storage, myDataProvider);
+    this.presenter = new PokedexPresenter(this, pokemonServiceProvider, myDataProvider);
 
     this.loadingController = loadingCtrl;
   }
@@ -73,7 +70,6 @@ class PokedexPresenter implements Presenter {
 
   view: View;
   pokemonServiceProvider: PokemonServiceProvider;
-  storage: Storage;
   currentPokemon: any;
   currentPokemonDescription: String;
   myDataProvider: MyDataProvider;
@@ -81,11 +77,9 @@ class PokedexPresenter implements Presenter {
   constructor(
     view: PokedexPage,
     pokemonServiceProvider: PokemonServiceProvider,
-    storage: Storage,
     myDataProvider: MyDataProvider
   ) {
     this.view = view;
-    this.storage = storage;
     this.pokemonServiceProvider = pokemonServiceProvider;
     this.myDataProvider = myDataProvider;
   }
@@ -104,7 +98,7 @@ class PokedexPresenter implements Presenter {
         var isFavourited = pokemonExistsInFavouriteArray(this.currentPokemon, favourites);
 
         if (isFavourited) {
-          this.myDataProvider.removeFavouriteById(this.currentPokemon.id)
+          this.myDataProvider.removeFavouriteById(this.currentPokemon.id);
         } else {
           this.myDataProvider.addToFavourites(
             new Favourite(
