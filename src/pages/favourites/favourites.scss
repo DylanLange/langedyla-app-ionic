@@ -1,3 +1,29 @@
 page-favourites {
 
 }
+
+.item {
+    display: inline;
+    margin: 0 0 24px 0;
+}
+
+.item_image {
+    width: 25%;
+    margin: 0 auto;
+    display: block;
+    float: left;
+}
+
+.item_info_container {
+    display: block;
+    width: 75%;
+    float: left;
+}
+
+.item_name {
+
+}
+
+.item_description {
+
+}

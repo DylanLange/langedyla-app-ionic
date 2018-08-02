@@ -18,8 +18,8 @@
     <!-- ng-href="#/app/pokemon-detail/{{favourite.id}}" -->
     <a class="item" *ngFor="let favourite of favourites">
       <img class="item_image" *ngIf="favourite !== undefined" [src]="favourite.imageUrl">
-      <div>
-        <p class="item_name" *ngIf="favourite !== undefined">{{favourite.name.charAt(0).toUpperCase() + favourite.name.slice(1)}}</p>
+      <div class="item_info_container">
+        <h3 class="item_name" *ngIf="favourite !== undefined">{{favourite.name.charAt(0).toUpperCase() + favourite.name.slice(1)}}</h3>
         <p class="item_description" *ngIf="favourite !== undefined">{{favourite.description}}</p>
       </div>
     </a>
