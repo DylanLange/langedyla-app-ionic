@@ -4,6 +4,8 @@ import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-
 import { Pokemon } from '../../data/models/Pokemon';
 import { Storage } from '@ionic/storage';
 import { MyDataProvider } from '../../providers/my-data/my-data';
+import { Favourite } from '../../data/models/favourite';
+import { pokemonExistsInFavouriteArray } from '../../utils/utils';
 
 /**
  * Generated class for the PokedexPage page.
@@ -72,12 +74,13 @@ class PokedexPresenter implements Presenter {
   view: View;
   pokemonServiceProvider: PokemonServiceProvider;
   storage: Storage;
-  currentPokemon: Object;
+  currentPokemon: any;
+  currentPokemonDescription: String;
   myDataProvider: MyDataProvider;
 
   constructor(
-    view: PokedexPage, 
-    pokemonServiceProvider: PokemonServiceProvider, 
+    view: PokedexPage,
+    pokemonServiceProvider: PokemonServiceProvider,
     storage: Storage,
     myDataProvider: MyDataProvider
   ) {
@@ -96,32 +99,23 @@ class PokedexPresenter implements Presenter {
   favouriteClicked() {
     this.view.showLoader();
 
-    this.storage.get(this.myDataProvider.favouritesStorageKey)
-      .then((_favourites) => {
-        var localSavedFavourites = JSON.parse(_favourites);
-        var favourites;
-        if (localSavedFavourites == null) {
-          favourites = new Array();
-        } else {
-          if (localSavedFavourites.constructor === Array) {
-            favourites = localSavedFavourites;
-          } else {
-            favourites = [localSavedFavourites];
-          }
-        }
-        var isFavourited = favourites.includes(this.currentPokemon.id);
+    this.myDataProvider.getFavourites()
+      .then((favourites) => {
+        var isFavourited = pokemonExistsInFavouriteArray(this.currentPokemon, favourites);
 
-        var newFavourites: string[];
         if (isFavourited) {
-          newFavourites = favourites.filter(id => id != this.currentPokemon.id);
-          if (newFavourites.constructor !== Array) {
-            newFavourites = [newFavourites];
-          }
+          this.myDataProvider.removeFavouriteById(this.currentPokemon.id)
         } else {
-          newFavourites = favourites.concat([this.currentPokemon.id]);
+          this.myDataProvider.addToFavourites(
+            new Favourite(
+              this.currentPokemon.id,
+              this.currentPokemon.name,
+              this.currentPokemon.sprites.front_default,
+              this.currentPokemonDescription
+            )
+          );
         }
 
-        this.storage.set(this.myDataProvider.favouritesStorageKey, JSON.stringify(newFavourites));
         this.view.setIsFavourited(!isFavourited);
 
         this.view.hideLoader();
@@ -146,7 +140,7 @@ class PokedexPresenter implements Presenter {
       });
   }
 
-  fetchSpecies(pokemon: Object) {
+  fetchSpecies(pokemon: any) {
     console.log("trying to get species from " + pokemon.species.url);
     this.pokemonServiceProvider.getFromEndpoint(pokemon.species.url)
       .then(
@@ -155,6 +149,7 @@ class PokedexPresenter implements Presenter {
           if (species !== undefined) {
             var englishFlavour = this.englishFlavour(species.flavor_text_entries);
             this.view.setPokemonData(pokemon, englishFlavour.flavor_text);
+            this.currentPokemonDescription = englishFlavour.flavor_text;
             this.updateFavouritedIcon();
           }
           return species;
@@ -167,20 +162,9 @@ class PokedexPresenter implements Presenter {
   }
 
   updateFavouritedIcon() {
-    this.storage.get(this.myDataProvider.favouritesStorageKey)
-      .then((_favourites) => {
-        var localSavedFavourites = JSON.parse(_favourites);
-        var favourites;
-        if (localSavedFavourites == null) {
-          favourites = new Array();
-        } else {
-          if (localSavedFavourites.constructor === Array) {
-            favourites = localSavedFavourites;
-          } else {
-            favourites = [localSavedFavourites];
-          }
-        }
-        var isFavourited = favourites.includes(this.currentPokemon.id);
+    this.myDataProvider.getFavourites()
+      .then((favourites) => {
+        var isFavourited = pokemonExistsInFavouriteArray(this.currentPokemon, favourites);
         this.view.setIsFavourited(isFavourited);
       });
   }
