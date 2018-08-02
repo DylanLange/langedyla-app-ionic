@@ -16,7 +16,6 @@ export class PokemonServiceProvider {
 
 	constructor(public http: HttpClient) {
 		this.http = http;
-		console.log('Hello PokemonServiceProvider Provider');
 	}
 
 	getPokemonByIdOrName(pokemonIdOrName: String) {

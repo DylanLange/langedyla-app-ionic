@@ -17,6 +17,7 @@ import { PokedexPage } from '../pages/pokedex/pokedex';
 import { FavouritesPage } from '../pages/favourites/favourites';
 import { AccountPage } from '../pages/account/account';
 import { PokemonServiceProvider } from '../providers/pokemon-service/pokemon-service';
+import { MyDataProvider } from '../providers/my-data/my-data';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { PokemonServiceProvider } from '../providers/pokemon-service/pokemon-ser
     StatusBar,
     SplashScreen,
     PokemonServiceProvider,
+    MyDataProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, Loading } from 
 import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
 import { Pokemon } from '../../data/models/Pokemon';
 import { Storage } from '@ionic/storage';
+import { MyDataProvider } from '../../providers/my-data/my-data';
 
 /**
  * Generated class for the PokedexPage page.
@@ -27,8 +28,15 @@ export class PokedexPage {
   presenter: Presenter;
   loadingController: LoadingController;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public pokemonServiceProvider: PokemonServiceProvider, public loadingCtrl: LoadingController, public storage: Storage) {
-    this.presenter = new PokedexPresenter(this, pokemonServiceProvider, storage);
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public pokemonServiceProvider: PokemonServiceProvider,
+    public loadingCtrl: LoadingController,
+    public storage: Storage,
+    public myDataProvider: MyDataProvider
+  ) {
+    this.presenter = new PokedexPresenter(this, pokemonServiceProvider, storage, myDataProvider);
 
     this.loadingController = loadingCtrl;
   }
@@ -65,13 +73,18 @@ class PokedexPresenter implements Presenter {
   pokemonServiceProvider: PokemonServiceProvider;
   storage: Storage;
   currentPokemon: Object;
+  myDataProvider: MyDataProvider;
 
-  favouritesStorageKey: string = "favourites";
-
-  constructor(view: PokedexPage, pokemonServiceProvider: PokemonServiceProvider, storage: Storage) {
+  constructor(
+    view: PokedexPage, 
+    pokemonServiceProvider: PokemonServiceProvider, 
+    storage: Storage,
+    myDataProvider: MyDataProvider
+  ) {
     this.view = view;
     this.storage = storage;
     this.pokemonServiceProvider = pokemonServiceProvider;
+    this.myDataProvider = myDataProvider;
   }
 
   searchEntered(query: String) {
@@ -83,14 +96,14 @@ class PokedexPresenter implements Presenter {
   favouriteClicked() {
     this.view.showLoader();
 
-    this.storage.get(this.favouritesStorageKey)
+    this.storage.get(this.myDataProvider.favouritesStorageKey)
       .then((_favourites) => {
         var localSavedFavourites = JSON.parse(_favourites);
         var favourites;
-        if(localSavedFavourites == null) {
+        if (localSavedFavourites == null) {
           favourites = new Array();
         } else {
-          if(localSavedFavourites.constructor === Array) {
+          if (localSavedFavourites.constructor === Array) {
             favourites = localSavedFavourites;
           } else {
             favourites = [localSavedFavourites];
@@ -99,16 +112,16 @@ class PokedexPresenter implements Presenter {
         var isFavourited = favourites.includes(this.currentPokemon.id);
 
         var newFavourites: string[];
-        if(isFavourited) {
+        if (isFavourited) {
           newFavourites = favourites.filter(id => id != this.currentPokemon.id);
-          if(newFavourites.constructor !== Array) {
+          if (newFavourites.constructor !== Array) {
             newFavourites = [newFavourites];
           }
         } else {
           newFavourites = favourites.concat([this.currentPokemon.id]);
         }
 
-        this.storage.set(this.favouritesStorageKey, JSON.stringify(newFavourites));
+        this.storage.set(this.myDataProvider.favouritesStorageKey, JSON.stringify(newFavourites));
         this.view.setIsFavourited(!isFavourited);
 
         this.view.hideLoader();
@@ -118,18 +131,18 @@ class PokedexPresenter implements Presenter {
   fetchPokemon(pokemonIdOrName: String) {
     this.pokemonServiceProvider.getPokemonByIdOrName(pokemonIdOrName)
       .then(
-          pokemon => {
-            if(pokemon !== undefined) {
-              console.log("got pokemon " + pokemon);
-              this.currentPokemon = pokemon;
-              this.fetchSpecies(pokemon);
-            }
-            return pokemon;
+        pokemon => {
+          if (pokemon !== undefined) {
+            console.log("got pokemon " + pokemon);
+            this.currentPokemon = pokemon;
+            this.fetchSpecies(pokemon);
           }
-        )
+          return pokemon;
+        }
+      )
       .catch(error => {
         this.view.hideLoader();
-        console.log(error); 
+        console.log(error);
       });
   }
 
@@ -137,31 +150,31 @@ class PokedexPresenter implements Presenter {
     console.log("trying to get species from " + pokemon.species.url);
     this.pokemonServiceProvider.getFromEndpoint(pokemon.species.url)
       .then(
-          species => {
-            this.view.hideLoader();
-            if(species !== undefined) {
-              var englishFlavour = this.englishFlavour(species.flavor_text_entries);
-              this.view.setPokemonData(pokemon, englishFlavour.flavor_text);
-              this.updateFavouritedIcon();
-            }
-            return species;
+        species => {
+          this.view.hideLoader();
+          if (species !== undefined) {
+            var englishFlavour = this.englishFlavour(species.flavor_text_entries);
+            this.view.setPokemonData(pokemon, englishFlavour.flavor_text);
+            this.updateFavouritedIcon();
           }
-        )
+          return species;
+        }
+      )
       .catch(error => {
         this.view.hideLoader();
-        console.log(error); 
+        console.log(error);
       });
   }
 
   updateFavouritedIcon() {
-    this.storage.get(this.favouritesStorageKey)
+    this.storage.get(this.myDataProvider.favouritesStorageKey)
       .then((_favourites) => {
         var localSavedFavourites = JSON.parse(_favourites);
         var favourites;
-        if(localSavedFavourites == null) {
+        if (localSavedFavourites == null) {
           favourites = new Array();
         } else {
-          if(localSavedFavourites.constructor === Array) {
+          if (localSavedFavourites.constructor === Array) {
             favourites = localSavedFavourites;
           } else {
             favourites = [localSavedFavourites];
@@ -173,8 +186,8 @@ class PokedexPresenter implements Presenter {
   }
 
   englishFlavour(flavour: Array<Object>): Object {
-    for(var i = 0; i < flavour.length; i++) {
-      if(flavour[i].language.name == "en") {
+    for (var i = 0; i < flavour.length; i++) {
+      if (flavour[i].language.name == "en") {
         console.log("filtered flavour: " + flavour[i]);
         return flavour[i];
       }
