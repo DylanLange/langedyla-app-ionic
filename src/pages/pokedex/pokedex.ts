@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
 import { Pokemon } from '../../data/models/Pokemon';
 import { Storage } from '@ionic/storage';
@@ -18,7 +18,7 @@ import { Storage } from '@ionic/storage';
 })
 export class PokedexPage {
 
-  loading: LoadingController;
+  loading: Loading;
 
   pokemon: Object;
   descriptionText: String = "";
@@ -66,7 +66,7 @@ class PokedexPresenter implements Presenter {
   storage: Storage;
   currentPokemon: Object;
 
-  favouritesStorageKey: String = "favourites";
+  favouritesStorageKey: string = "favourites";
 
   constructor(view: PokedexPage, pokemonServiceProvider: PokemonServiceProvider, storage: Storage) {
     this.view = view;
@@ -98,7 +98,7 @@ class PokedexPresenter implements Presenter {
         }
         var isFavourited = favourites.includes(this.currentPokemon.id);
 
-        var newFavourites: Array<String>;
+        var newFavourites: string[];
         if(isFavourited) {
           newFavourites = favourites.filter(id => id != this.currentPokemon.id);
           if(newFavourites.constructor !== Array) {
