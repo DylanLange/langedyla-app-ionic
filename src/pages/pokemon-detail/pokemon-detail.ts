@@ -3,6 +3,8 @@ import { Pokemon } from '../../data/models/pokemon';
 import { Favourite } from '../../data/models/favourite';
 import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
 import { IonicPage, Loading, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { SpeciesEntry } from '../../data/models/speciesentry';
+import { Species } from '../../data/models/species';
 
 /**
  * Generated class for the PokemonDetailPage page.
@@ -20,6 +22,9 @@ export class PokemonDetailPage implements View {
 
   loading: Loading;
   presenter: Presenter;
+
+  pokemon: Pokemon;
+  descriptionText: String;
 
   constructor(
     public navCtrl: NavController,
@@ -41,12 +46,9 @@ export class PokemonDetailPage implements View {
     this.loading.dismiss();
   }
 
-  setFavouriteData(favourite: Favourite) {
-
-  }
-
-  setFullPokemonData(pokemon: Pokemon) {
-    console.log(pokemon.stats);
+  setFullPokemonData(pokemon: Pokemon, description: String) {
+    this.pokemon = pokemon;
+    this.descriptionText = description;
   }
 
 }
@@ -58,17 +60,33 @@ class PokemonDetailPresenter implements Presenter {
     public pokemonServiceProvider: PokemonServiceProvider,
     public favourite: Favourite
   ) {
-    view.setFavouriteData(favourite);
     view.showLoader();
     pokemonServiceProvider.getPokemonByIdOrName("" + favourite.id)
       .then((pokemon) => {
-        view.hideLoader();
         if (pokemon !== undefined) {
-          view.setFullPokemonData(pokemon);
+          this.getPokemonSpecies(pokemon);
         } else {
           //maybe show some error
         }
       });
+  }
+
+  getPokemonSpecies(pokemon: Pokemon) {
+    this.pokemonServiceProvider.getFromEndpoint(pokemon.species.url)
+      .then((species: Species) => {
+        this.view.hideLoader();
+        var englishFlavour: SpeciesEntry = this.englishFlavour(species.flavor_text_entries)
+        this.view.setFullPokemonData(pokemon, englishFlavour.flavor_text);
+      });
+  }
+
+  englishFlavour(flavour: Array<SpeciesEntry>): SpeciesEntry {
+    for (var i = 0; i < flavour.length; i++) {
+      if (flavour[i].language.name == "en") {
+        console.log("filtered flavour: " + flavour[i]);
+        return flavour[i];
+      }
+    }
   }
 
 }
@@ -76,8 +94,7 @@ class PokemonDetailPresenter implements Presenter {
 interface View {
   showLoader();
   hideLoader();
-  setFavouriteData(favourite: Favourite);
-  setFullPokemonData(pokemon: Pokemon);
+  setFullPokemonData(pokemon: Pokemon, description: String);
 }
 
 interface Presenter {
