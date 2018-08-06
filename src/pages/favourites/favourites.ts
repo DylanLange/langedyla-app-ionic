@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { MyDataProvider } from '../../providers/my-data/my-data';
-import Favourite from '../../data/models/favourite';
 import { Pokemon } from '../../data/models/pokemon';
 import { PokemonDetailPage } from '../pokemon-detail/pokemon-detail';
 import { NavController, NavParams, IonicPage } from 'ionic-angular';
+import { Favourite } from '../../data/models/favourite';
 
 /**
  * Generated class for the FavouritesPage page.

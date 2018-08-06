@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Favourite } from '../../data/models/favourite';
 import { Observable } from '../../../node_modules/rxjs/Observable';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/observable/fromPromise';
+import { Favourite } from '../../data/models/favourite';
 
 /*
   Generated class for the MyDataProvider provider.
@@ -49,8 +49,7 @@ export class MyDataProvider {
   removeFavouriteById(id: Number) {
     return Observable.fromPromise(this.getFavourites())
       .map((favourites) => {
-        var newFavourites = favourites.filter((favourite) => favourite.id != id);
-        if(newFavourites.constructor !== Array) newFavourites = [newFavourites];
+        var newFavourites: Favourite[] = favourites.filter((favourite) => favourite.id != id);
         this.setFavourites(newFavourites);
         return true;
       })

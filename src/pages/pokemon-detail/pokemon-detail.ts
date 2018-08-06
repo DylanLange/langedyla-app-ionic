@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Pokemon } from '../../data/models/pokemon';
-import Favourite from '../../data/models/favourite';
+import { Favourite } from '../../data/models/favourite';
 import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
 import { IonicPage, Loading, NavController, NavParams, LoadingController } from 'ionic-angular';
 

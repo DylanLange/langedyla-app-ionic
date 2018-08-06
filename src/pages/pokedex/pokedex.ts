@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, Loading } from 
 import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
 import { MyDataProvider } from '../../providers/my-data/my-data';
 import { pokemonExistsInFavouriteArray } from '../../utils/utils';
-import Favourite from '../../data/models/favourite';
+import { Favourite } from '../../data/models/favourite';
 import { Pokemon } from '../../data/models/pokemon';
 import { Species } from '../../data/models/species';
 import { SpeciesEntry } from '../../data/models/speciesentry';
