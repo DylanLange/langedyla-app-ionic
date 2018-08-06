@@ -1,12 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { HttpClientModule } from '@angular/common/http'; 
-import { HttpModule } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
 
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -19,6 +16,7 @@ import { AccountPage } from '../pages/account/account';
 import { PokemonServiceProvider } from '../providers/pokemon-service/pokemon-service';
 import { MyDataProvider } from '../providers/my-data/my-data';
 import { PokemonDetailPage } from '../pages/pokemon-detail/pokemon-detail';
+import { SplashPage } from '../pages/splash/splash';
 
 @NgModule({
   declarations: [
@@ -28,7 +26,8 @@ import { PokemonDetailPage } from '../pages/pokemon-detail/pokemon-detail';
     PokedexPage,
     FavouritesPage,
     AccountPage,
-    PokemonDetailPage
+    PokemonDetailPage,
+    SplashPage
   ],
   imports: [
     BrowserModule,
@@ -44,11 +43,11 @@ import { PokemonDetailPage } from '../pages/pokemon-detail/pokemon-detail';
     PokedexPage,
     FavouritesPage,
     AccountPage,
-    PokemonDetailPage
+    PokemonDetailPage,
+    SplashPage
   ],
   providers: [
     StatusBar,
-    SplashScreen,
     PokemonServiceProvider,
     MyDataProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

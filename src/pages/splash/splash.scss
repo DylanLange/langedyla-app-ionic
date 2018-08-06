@@ -1,0 +1,17 @@
+page-splash {
+    
+}
+
+.background {
+    background: map-get($colors, dark);
+}
+
+.splash-logo {
+    width: 60%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+}
