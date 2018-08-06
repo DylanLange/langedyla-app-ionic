@@ -33,7 +33,7 @@ import { PokemonDetailPage } from '../pages/pokemon-detail/pokemon-detail';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {tabsHideOnSubPages: true}),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
