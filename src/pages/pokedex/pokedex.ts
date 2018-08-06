@@ -70,9 +70,6 @@ export class PokedexPage {
 
 class PokedexPresenter implements Presenter {
 
-  currentPokemon: any;
-  currentPokemonDescription: String;
-
   constructor(
     public view: PokedexPage,
     public pokemonServiceProvider: PokemonServiceProvider,
@@ -87,22 +84,22 @@ class PokedexPresenter implements Presenter {
     this.fetchPokemon(query);
   }
 
-  favouriteClicked() {
+  favouriteBtnClicked(currentPokemon: Pokemon, currentPokemonDescription: String) {
     this.view.showLoader();
 
     this.myDataProvider.getFavourites()
       .then((favourites) => {
-        var isFavourited = pokemonExistsInFavouriteArray(this.currentPokemon, favourites);
+        var isFavourited = pokemonExistsInFavouriteArray(currentPokemon, favourites);
 
         if (isFavourited) {
-          this.myDataProvider.removeFavouriteById(this.currentPokemon.id);
+          this.myDataProvider.removeFavouriteById(currentPokemon.id);
         } else {
           this.myDataProvider.addToFavourites(
             new Favourite(
-              this.currentPokemon.id,
-              this.currentPokemon.name,
-              this.currentPokemon.sprites.front_default,
-              this.currentPokemonDescription
+              currentPokemon.id,
+              currentPokemon.name,
+              currentPokemon.sprites.front_default,
+              currentPokemonDescription
             )
           );
         }
@@ -119,7 +116,6 @@ class PokedexPresenter implements Presenter {
         pokemon => {
           if (pokemon !== undefined) {
             console.log("got pokemon " + pokemon);
-            this.currentPokemon = pokemon;
             this.fetchSpecies(pokemon);
           }
           return pokemon;
@@ -132,7 +128,6 @@ class PokedexPresenter implements Presenter {
   }
 
   fetchSpecies(pokemon: Pokemon) {
-    console.log("trying to get species from " + pokemon.species.url);
     this.pokemonServiceProvider.getFromEndpoint(pokemon.species.url)
       .then(
         (species: Species) => {
@@ -140,8 +135,7 @@ class PokedexPresenter implements Presenter {
           if (species !== undefined) {
             var englishFlavour = this.englishFlavour(species.flavor_text_entries);
             this.view.setPokemonData(pokemon, englishFlavour.flavor_text);
-            this.currentPokemonDescription = englishFlavour.flavor_text;
-            this.updateFavouritedIcon();
+            this.updateFavouritedIcon(pokemon);
           }
           return species;
         }
@@ -152,10 +146,10 @@ class PokedexPresenter implements Presenter {
       });
   }
 
-  updateFavouritedIcon() {
+  updateFavouritedIcon(pokemon: Pokemon) {
     this.myDataProvider.getFavourites()
       .then((favourites) => {
-        var isFavourited = pokemonExistsInFavouriteArray(this.currentPokemon, favourites);
+        var isFavourited = pokemonExistsInFavouriteArray(pokemon, favourites);
         this.view.setIsFavourited(isFavourited);
       });
   }
@@ -180,5 +174,5 @@ interface View {
 
 interface Presenter {
   searchEntered(query: String);
-  favouriteClicked();
+  favouriteBtnClicked(currentPokemon: Pokemon, currentPokemonDescription: String);
 }

@@ -1,5 +1,6 @@
 import { Stat } from "./stat";
 import { UrlName } from "./urlname";
+import { Sprites } from "./sprites";
 
 export class Pokemon {
 
@@ -12,7 +13,8 @@ export class Pokemon {
 		public order: Number,
 		public weight: Number,
 		public stats: Stat[],
-		public species: UrlName
+		public species: UrlName,
+		public sprites: Sprites
 	) {
 
 	}

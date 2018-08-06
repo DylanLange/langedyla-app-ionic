@@ -6,34 +6,28 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>PokemonDetail</ion-title> 
-  </ion-navbar>
+	<ion-navbar>
+		<div class="title_favourite_container">
+			<ion-title *ngIf="pokemon !== undefined" class="title">{{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}</ion-title>
+			<button ion-button icon-only round [hidden]="pokemon == undefined" (click)='presenter.favouriteBtnClicked(pokemon, descriptionText);' class="favourite">
+				<ion-icon name="star" color="{{favouriteBtnColor}}"></ion-icon>
+			</button>
+		</div>
+	</ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <h1 
-		*ngIf="pokemon !== undefined"
-		text-center>
-		{{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}
-	</h1>
 
 	<div class="top_container">
-		<img 
-			class="pokemon_image" 
-			*ngIf="pokemon !== undefined" 
-			[src]="pokemon.sprites.front_default">
+		<img class="pokemon_image" *ngIf="pokemon !== undefined" [src]="pokemon.sprites.front_default">
 
-		<div class="height_weight_container"
-			padding>
-			<p class="height_weight_content" 
-				*ngIf="pokemon !== undefined">
+		<div class="height_weight_container" padding>
+			<p class="height_weight_content" *ngIf="pokemon !== undefined">
 				Weight: {{pokemon.weight}}
 			</p>
-			<p class="height_weight_content" 
-				*ngIf="pokemon !== undefined">
+			<p class="height_weight_content" *ngIf="pokemon !== undefined">
 				Height: {{pokemon.height}}
 			</p>
 		</div>

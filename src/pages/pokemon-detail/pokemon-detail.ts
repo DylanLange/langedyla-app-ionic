@@ -5,6 +5,8 @@ import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-
 import { IonicPage, Loading, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { SpeciesEntry } from '../../data/models/speciesentry';
 import { Species } from '../../data/models/species';
+import { MyDataProvider } from '../../providers/my-data/my-data';
+import { pokemonExistsInFavouriteArray } from '../../utils/utils';
 
 /**
  * Generated class for the PokemonDetailPage page.
@@ -25,14 +27,16 @@ export class PokemonDetailPage implements View {
 
   pokemon: Pokemon;
   descriptionText: String;
+  favouriteBtnColor = "not_favourite";
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public pokemonServiceProvider: PokemonServiceProvider,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public myDataProvider: MyDataProvider
   ) {
-    this.presenter = new PokemonDetailPresenter(this, pokemonServiceProvider, navParams.data);
+    this.presenter = new PokemonDetailPresenter(this, pokemonServiceProvider, navParams.data, myDataProvider);
   }
 
   showLoader() {
@@ -51,6 +55,10 @@ export class PokemonDetailPage implements View {
     this.descriptionText = description;
   }
 
+  setIsFavourited(isFavourited: Boolean) {
+    this.favouriteBtnColor = isFavourited ? "favourite" : "not_favourite";
+  }
+
 }
 
 class PokemonDetailPresenter implements Presenter {
@@ -58,7 +66,8 @@ class PokemonDetailPresenter implements Presenter {
   constructor(
     public view: View,
     public pokemonServiceProvider: PokemonServiceProvider,
-    public favourite: Favourite
+    public favourite: Favourite,
+    public myDataProvider: MyDataProvider
   ) {
     view.showLoader();
     pokemonServiceProvider.getPokemonByIdOrName("" + favourite.id)
@@ -77,6 +86,7 @@ class PokemonDetailPresenter implements Presenter {
         this.view.hideLoader();
         var englishFlavour: SpeciesEntry = this.englishFlavour(species.flavor_text_entries)
         this.view.setFullPokemonData(pokemon, englishFlavour.flavor_text);
+        this.updateFavouritedIcon(pokemon);
       });
   }
 
@@ -89,15 +99,49 @@ class PokemonDetailPresenter implements Presenter {
     }
   }
 
+  favouriteBtnClicked(currentPokemon: Pokemon, currentPokemonDescription: String) {
+    this.view.showLoader();
+
+    this.myDataProvider.getFavourites()
+      .then((favourites) => {
+        var isFavourited = pokemonExistsInFavouriteArray(currentPokemon, favourites);
+
+        if (isFavourited) {
+          this.myDataProvider.removeFavouriteById(currentPokemon.id);
+        } else {
+          this.myDataProvider.addToFavourites(
+            new Favourite(
+              currentPokemon.id,
+              currentPokemon.name,
+              currentPokemon.sprites.front_default,
+              currentPokemonDescription
+            )
+          );
+        }
+
+        this.view.setIsFavourited(!isFavourited);
+
+        this.view.hideLoader();
+      });
+  }
+
+  updateFavouritedIcon(pokemon: Pokemon) {
+    this.myDataProvider.getFavourites()
+      .then((favourites) => {
+        var isFavourited = pokemonExistsInFavouriteArray(pokemon, favourites);
+        this.view.setIsFavourited(isFavourited);
+      });
+  }
+
 }
 
 interface View {
   showLoader();
   hideLoader();
   setFullPokemonData(pokemon: Pokemon, description: String);
+  setIsFavourited(isFavourited: Boolean)
 }
 
 interface Presenter {
-
-
+  favouriteBtnClicked(pokemon: Pokemon, description: String);
 }
