@@ -9,7 +9,8 @@
 	<ion-navbar>
 		<div class="title_favourite_container">
 			<ion-title *ngIf="pokemon !== undefined" class="title">{{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}}</ion-title>
-			<button ion-button icon-only round [hidden]="pokemon == undefined" (click)='presenter.favouriteBtnClicked(pokemon, descriptionText);' class="favourite">
+			<button ion-button icon-only round [hidden]="pokemon == undefined" (click)='presenter.favouriteBtnClicked(pokemon, descriptionText);'
+			 class="favourite">
 				<ion-icon name="star" color="{{favouriteBtnColor}}"></ion-icon>
 			</button>
 		</div>
@@ -33,7 +34,15 @@
 		</div>
 	</div>
 
+	<h4 *ngIf="pokemon !== undefined">Description:</h4>
 	<p text-center>
 		{{descriptionText}}
 	</p>
+
+	<h4 *ngIf="pokemon !== undefined">Base Stats:</h4>
+	<ion-list class="base_stats_list" *ngIf="pokemon !== undefined">
+		<p *ngFor="let stat of pokemon.stats">
+			<b>{{stat.stat.name.charAt(0).toUpperCase() + stat.stat.name.slice(1)}}:</b> {{stat.base_stat}}
+		</p>
+	</ion-list>
 </ion-content>
