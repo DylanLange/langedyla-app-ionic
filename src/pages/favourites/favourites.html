@@ -15,8 +15,7 @@
 
 <ion-content padding>
   <ion-list>
-    <!-- ng-href="#/app/pokemon-detail/{{favourite.id}}" -->
-    <a class="item" *ngFor="let favourite of favourites">
+    <a class="item" *ngFor="let favourite of favourites" (click)="favouriteClicked(favourite)">
       <img class="item_image" *ngIf="favourite !== undefined" [src]="favourite.imageUrl">
       <div class="item_info_container">
         <h3 class="item_name" *ngIf="favourite !== undefined">{{favourite.name.charAt(0).toUpperCase() + favourite.name.slice(1)}}</h3>

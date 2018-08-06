@@ -4,6 +4,9 @@ import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-
 import { MyDataProvider } from '../../providers/my-data/my-data';
 import { pokemonExistsInFavouriteArray } from '../../utils/utils';
 import Favourite from '../../data/models/favourite';
+import { Pokemon } from '../../data/models/pokemon';
+import { Species } from '../../data/models/species';
+import { SpeciesEntry } from '../../data/models/speciesentry';
 
 /**
  * Generated class for the PokedexPage page.
@@ -26,7 +29,6 @@ export class PokedexPage {
   favouriteBtnColor = "not_favourite";
   searchQuery: String = "";
   presenter: Presenter;
-  loadingController: LoadingController;
 
   constructor(
     public navCtrl: NavController,
@@ -37,7 +39,7 @@ export class PokedexPage {
   ) {
     this.presenter = new PokedexPresenter(this, pokemonServiceProvider, myDataProvider);
 
-    this.loadingController = loadingCtrl;
+    this.loadingCtrl = loadingCtrl;
   }
 
   search(event: any) {
@@ -45,7 +47,7 @@ export class PokedexPage {
   }
 
   showLoader() {
-    this.loading = this.loadingController.create({
+    this.loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });//reinitialise because you can't reuse them apparently
     this.loading.present();
@@ -68,20 +70,15 @@ export class PokedexPage {
 
 class PokedexPresenter implements Presenter {
 
-  view: View;
-  pokemonServiceProvider: PokemonServiceProvider;
   currentPokemon: any;
   currentPokemonDescription: String;
-  myDataProvider: MyDataProvider;
 
   constructor(
-    view: PokedexPage,
-    pokemonServiceProvider: PokemonServiceProvider,
-    myDataProvider: MyDataProvider
+    public view: PokedexPage,
+    public pokemonServiceProvider: PokemonServiceProvider,
+    public myDataProvider: MyDataProvider
   ) {
-    this.view = view;
-    this.pokemonServiceProvider = pokemonServiceProvider;
-    this.myDataProvider = myDataProvider;
+    
   }
 
   searchEntered(query: String) {
@@ -134,11 +131,11 @@ class PokedexPresenter implements Presenter {
       });
   }
 
-  fetchSpecies(pokemon: any) {
+  fetchSpecies(pokemon: Pokemon) {
     console.log("trying to get species from " + pokemon.species.url);
     this.pokemonServiceProvider.getFromEndpoint(pokemon.species.url)
       .then(
-        species => {
+        (species: Species) => {
           this.view.hideLoader();
           if (species !== undefined) {
             var englishFlavour = this.englishFlavour(species.flavor_text_entries);
@@ -163,7 +160,7 @@ class PokedexPresenter implements Presenter {
       });
   }
 
-  englishFlavour(flavour: Array<Object>): Object {
+  englishFlavour(flavour: Array<SpeciesEntry>): SpeciesEntry {
     for (var i = 0; i < flavour.length; i++) {
       if (flavour[i].language.name == "en") {
         console.log("filtered flavour: " + flavour[i]);
@@ -177,7 +174,7 @@ class PokedexPresenter implements Presenter {
 interface View {
   showLoader();
   hideLoader();
-  setPokemonData(pokemon: Object, species: Object);
+  setPokemonData(pokemon: Pokemon, species: Species);
   setIsFavourited(isFavourited: Boolean);
 }
 

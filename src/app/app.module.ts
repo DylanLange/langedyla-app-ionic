@@ -18,6 +18,7 @@ import { FavouritesPage } from '../pages/favourites/favourites';
 import { AccountPage } from '../pages/account/account';
 import { PokemonServiceProvider } from '../providers/pokemon-service/pokemon-service';
 import { MyDataProvider } from '../providers/my-data/my-data';
+import { PokemonDetailPage } from '../pages/pokemon-detail/pokemon-detail';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MyDataProvider } from '../providers/my-data/my-data';
     MainPage,
     PokedexPage,
     FavouritesPage,
-    AccountPage
+    AccountPage,
+    PokemonDetailPage
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ import { MyDataProvider } from '../providers/my-data/my-data';
     MainPage,
     PokedexPage,
     FavouritesPage,
-    AccountPage
+    AccountPage,
+    PokemonDetailPage
   ],
   providers: [
     StatusBar,

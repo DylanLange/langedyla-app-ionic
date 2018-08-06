@@ -1,28 +1,20 @@
+import { Stat } from "./stat";
+import { UrlName } from "./urlname";
+
 export class Pokemon {
 
-	id: Number
-	name: String
-	base_experience: Number
-	height: Number
-	is_default: Boolean
-	order: Number
-	weight: Number
-
 	constructor(
-			id: Number, 
-			name: String,
-			base_experience: Number,
-			height: Number,
-			is_default: Boolean,
-			order: Number,
-			weight: Number) {
-		this.id = id
-		this.name = name
-		this.base_experience = base_experience
-		this.height = height
-		this.is_default = is_default
-		this.order = order
-		this.weight = weight
+		public id: Number,
+		public name: String,
+		public base_experience: Number,
+		public height: Number,
+		public is_default: Boolean,
+		public order: Number,
+		public weight: Number,
+		public stats: Stat[],
+		public species: UrlName
+	) {
+
 	}
 
 }

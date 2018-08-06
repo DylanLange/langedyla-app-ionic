@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, List } from 'ionic-angular';
 import { MyDataProvider } from '../../providers/my-data/my-data';
 import Favourite from '../../data/models/favourite';
+import { Pokemon } from '../../data/models/pokemon';
+import { PokemonDetailPage } from '../pokemon-detail/pokemon-detail';
+import { NavController, NavParams, IonicPage } from 'ionic-angular';
 
 /**
  * Generated class for the FavouritesPage page.
@@ -15,7 +17,7 @@ import Favourite from '../../data/models/favourite';
   selector: 'page-favourites',
   templateUrl: 'favourites.html',
 })
-export class FavouritesPage {
+export class FavouritesPage implements View {
 
   favourites: Favourite[] = [];
   presenter: Presenter;
@@ -25,27 +27,32 @@ export class FavouritesPage {
     public navParams: NavParams,
     public myDataProvider: MyDataProvider
   ) {
-    this.presenter = new FavouritesPresenter(this, myDataProvider);
+    this.presenter = new FavouritesPresenter(this, myDataProvider); 
   }
 
   ionViewDidEnter() {
-    this.presenter.viewDidEnter();
+    this.presenter.viewDidEnter(); 
   }
 
   setFavouritesData(favourites: Favourite[]) {
     this.favourites = favourites;
   }
 
+  goToPokemonDetail(favourite: Favourite) {
+    this.navCtrl.push(PokemonDetailPage, favourite);
+  }
+
+  favouriteClicked(favourite: Favourite){
+    this.presenter.favouriteClicked(favourite);
+  }
+
 }
 
-class FavouritesPresenter implements Presenter {
-
-  view: View;
-  myDataProvider: MyDataProvider;
+export class FavouritesPresenter implements Presenter {
 
   constructor(
-    view: View,
-    myDataProvider: MyDataProvider
+    public view: View,
+    public myDataProvider: MyDataProvider
   ) {
     this.view = view;
     this.myDataProvider = myDataProvider;
@@ -54,18 +61,22 @@ class FavouritesPresenter implements Presenter {
   viewDidEnter() {
     this.myDataProvider.getFavourites()
       .then((favourites) => {
-        console.log("loaded favourites in other tab");
-        console.log(favourites);
         this.view.setFavouritesData(favourites);
       });
+  }
+
+  favouriteClicked(favourite: Favourite) {
+    this.view.goToPokemonDetail(favourite);
   }
 
 }
 
 interface View {
   setFavouritesData(favourites: Favourite[]);
+  goToPokemonDetail(favourite: Favourite);
 }
 
 interface Presenter {
   viewDidEnter();
+  favouriteClicked(favourite: Favourite);
 }

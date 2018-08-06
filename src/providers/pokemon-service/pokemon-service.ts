@@ -1,7 +1,7 @@
-import { HttpClient, HttpModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http'; 
 import 'rxjs/add/operator/map'
+import { Pokemon } from '../../data/models/pokemon';
 
 /*
   Generated class for the PokemonServiceProvider provider.
@@ -18,12 +18,12 @@ export class PokemonServiceProvider {
 		this.http = http;
 	}
 
-	getPokemonByIdOrName(pokemonIdOrName: String) {
+	getPokemonByIdOrName(pokemonIdOrName: String): Promise<Pokemon> {
 		console.log("in service: " + pokemonIdOrName);
 		return new Promise(resolve => {
 			this.http
 				.get(this.endpoint + "pokemon/" + pokemonIdOrName)
-				.subscribe(res => {
+				.subscribe((res: Pokemon) => {
 					console.log(res);
 					resolve(res);
 				}, error => {
@@ -37,7 +37,7 @@ export class PokemonServiceProvider {
 		console.log("GET from endpoint " + endpoint);
 		return new Promise(resolve => {
 			this.http
-				.get(endpoint)
+				.get(endpoint + "")
 				.subscribe(res => {
 					console.log(res);
 					resolve(res);
