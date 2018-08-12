@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MainPage } from '../main/main';
 import { delay } from '../../utils/utils';
+import { LoginPage } from '../login/login';
 
 /**
  * Generated class for the SplashPage page.
@@ -22,7 +23,7 @@ export class SplashPage {
 
   ionViewDidLoad() {
     delay(1500)
-      .then(() => this.navCtrl.setRoot(MainPage));
+      .then(() => this.navCtrl.setRoot(LoginPage));
   }
 
 }

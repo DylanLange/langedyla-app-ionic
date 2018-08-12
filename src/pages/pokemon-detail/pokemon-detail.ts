@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { Pokemon } from '../../data/models/pokemon';
 import { Favourite } from '../../data/models/favourite';
-import { PokemonServiceProvider } from '../../providers/pokemon-service/pokemon-service';
 import { IonicPage, Loading, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { SpeciesEntry } from '../../data/models/speciesentry';
 import { Species } from '../../data/models/species';
 import { MyDataProvider } from '../../providers/my-data/my-data';
 import { pokemonExistsInFavouriteArray } from '../../utils/utils';
+import { PokemonServiceProvider } from '../../providers/pokemon-service';
 
 /**
  * Generated class for the PokemonDetailPage page.

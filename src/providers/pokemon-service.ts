@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map'
-import { Pokemon } from '../../data/models/pokemon';
+import { Pokemon } from '../data/models/pokemon';
 
 /*
   Generated class for the PokemonServiceProvider provider.
