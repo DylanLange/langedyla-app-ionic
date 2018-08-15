@@ -16,7 +16,7 @@
 	<div class="search_favourite_container">
 		<ion-searchbar class="searchbar" [(ngModel)]="searchQuery" (change)="search($event)">
 		</ion-searchbar>
-		<button ion-button icon-only round [hidden]="pokemon == undefined" (click)='presenter.favouriteBtnClicked(pokemon);' class="favourite">
+		<button ion-button icon-only round [hidden]="pokemon == undefined" (click)='presenter.favouriteBtnClicked(pokemon, descriptionText);' class="favourite">
 			<ion-icon name="star" color="{{favouriteBtnColor}}"></ion-icon>
 		</button>
 	</div>

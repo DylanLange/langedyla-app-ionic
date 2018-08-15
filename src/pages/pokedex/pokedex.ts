@@ -86,7 +86,7 @@ class PokedexPresenter implements Presenter {
 
   favouriteBtnClicked(currentPokemon: Pokemon, currentPokemonDescription: String) {
     this.view.showLoader();
-
+    console.log("favouriteBtnClicked. currentPokemonDescription: " + currentPokemonDescription);
     this.myDataProvider.getFavourites()
       .then((favourites) => {
         var isFavourited = pokemonExistsInFavouriteArray(currentPokemon, favourites);

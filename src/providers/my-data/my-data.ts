@@ -38,6 +38,8 @@ export class MyDataProvider {
   }
 
   addToFavourites(newFavourite: Favourite): Promise<Boolean> {
+    console.log("adding new favourite: ");
+    console.log(newFavourite);
     return Observable.fromPromise(this.getFavourites())
       .map((favourites) => {
         this.setFavourites(favourites.concat([newFavourite]))
