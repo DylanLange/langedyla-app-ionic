@@ -16,7 +16,7 @@ export class MyDataProvider {
 
   favouritesStorageKey: string = "_1adwa3"
 
-  constructor(public storage: Storage) {
+  constructor(private storage: Storage) {
     this.storage = storage;
   }
 

@@ -8,7 +8,7 @@ import { Credentials } from '../data/models/credentials';
 export class AuthService {
 	private user: firebase.User;
 
-	constructor(public afAuth: AngularFireAuth) {
+	constructor(private afAuth: AngularFireAuth) {
 		afAuth.authState.subscribe(user => {
 			this.user = user;
 		});
@@ -19,7 +19,6 @@ export class AuthService {
 	}
 
 	signInWithEmail(credentials: Credentials) {
-		console.log('Sign in with email');
 		return this.afAuth.auth.signInWithEmailAndPassword(credentials.email + "", credentials.password + "");
 	}
 

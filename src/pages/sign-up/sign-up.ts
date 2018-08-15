@@ -26,8 +26,8 @@ export class SignUpPage implements View {
   presenter: Presenter;
 
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams,
+    private navCtrl: NavController, 
+    private navParams: NavParams,
     private loadingCtrl: LoadingController,
     auth: AuthService,
     fb: FormBuilder

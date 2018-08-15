@@ -17,28 +17,8 @@ export class MainPage implements View {
   favouritesRoot = FavouritesPage;
   accountRoot = AccountPage;
 
-  constructor(public navCtrl: NavController) {
+  constructor(private navCtrl: NavController) {
     
-  }
-
-  ionViewDidLoad() {
-
-  }
-
-  ionViewWillEnter() {
-
-  }
-
-  ionViewDidEnter() {
-
-  }
-
-  ionViewWillLeave() {
-
-  }
-
-  ionViewWillUnload() {
-
   }
 
 }
@@ -46,7 +26,7 @@ export class MainPage implements View {
 
 class MainPresenter implements Presenter{
 
-	constructor(view: MainPage) {
+	constructor(private view: MainPage) {
 
 	}
 

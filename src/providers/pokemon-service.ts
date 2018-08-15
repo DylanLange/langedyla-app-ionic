@@ -14,8 +14,8 @@ export class PokemonServiceProvider {
 
 	endpoint = 'https://pokeapi.co/api/v2/';
 
-	constructor(public http: HttpClient) {
-		this.http = http;
+	constructor(private http: HttpClient) {
+		
 	}
 
 	getPokemonByIdOrName(pokemonIdOrName: String): Promise<Pokemon> {

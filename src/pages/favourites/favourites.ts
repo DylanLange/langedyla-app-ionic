@@ -23,9 +23,9 @@ export class FavouritesPage implements View {
   presenter: Presenter;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public myDataProvider: MyDataProvider
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private myDataProvider: MyDataProvider
   ) {
     this.presenter = new FavouritesPresenter(this, myDataProvider); 
   }
@@ -51,8 +51,8 @@ export class FavouritesPage implements View {
 export class FavouritesPresenter implements Presenter {
 
   constructor(
-    public view: View,
-    public myDataProvider: MyDataProvider
+    private view: View,
+    private myDataProvider: MyDataProvider
   ) {
     this.view = view;
     this.myDataProvider = myDataProvider;

@@ -30,11 +30,11 @@ export class PokemonDetailPage implements View {
   favouriteBtnColor = "not_favourite";
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public pokemonServiceProvider: PokemonServiceProvider,
-    public loadingCtrl: LoadingController,
-    public myDataProvider: MyDataProvider
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private pokemonServiceProvider: PokemonServiceProvider,
+    private loadingCtrl: LoadingController,
+    private myDataProvider: MyDataProvider
   ) {
     this.presenter = new PokemonDetailPresenter(this, pokemonServiceProvider, navParams.data, myDataProvider);
   }
@@ -64,10 +64,10 @@ export class PokemonDetailPage implements View {
 class PokemonDetailPresenter implements Presenter {
 
   constructor(
-    public view: View,
-    public pokemonServiceProvider: PokemonServiceProvider,
-    public favourite: Favourite,
-    public myDataProvider: MyDataProvider
+    private view: View,
+    private pokemonServiceProvider: PokemonServiceProvider,
+    private favourite: Favourite,
+    private myDataProvider: MyDataProvider
   ) {
     view.showLoader();
     pokemonServiceProvider.getPokemonByIdOrName("" + favourite.id)
