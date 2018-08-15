@@ -24,6 +24,7 @@ import { LoginPage } from '../pages/login/login';
 import { AuthService } from '../providers/auth-service';
 import { IonicModule, IonicApp, IonicErrorHandler } from 'ionic-angular';
 import { NgxErrorsModule } from '@ultimate/ngxerrors';
+import { SignUpPage } from '../pages/sign-up/sign-up';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { NgxErrorsModule } from '@ultimate/ngxerrors';
     AccountPage,
     PokemonDetailPage,
     LoginPage,
+    SignUpPage,
     SplashPage
   ],
   imports: [
@@ -55,6 +57,7 @@ import { NgxErrorsModule } from '@ultimate/ngxerrors';
     AccountPage,
     PokemonDetailPage,
     LoginPage,
+    SignUpPage,
     SplashPage
   ],
   providers: [
