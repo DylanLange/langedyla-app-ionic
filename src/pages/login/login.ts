@@ -78,6 +78,10 @@ export class LoginPage implements View {
     this.presenter.signUpClicked();
   }
 
+  loginWithGoogle() {
+    this.presenter.googleLoginClicked();
+  }
+
 }
 
 export class LoginPresenter implements Presenter {
@@ -108,6 +112,22 @@ export class LoginPresenter implements Presenter {
       );
   }
 
+  googleLoginClicked() {
+    this.view.showLoader();
+    this.auth.signInWithGoogle()
+      .then(
+        () => {
+          this.view.hideLoader();
+          this.view.goToMain()
+        },
+        error => {
+          this.view.hideLoader();
+          console.log(error.message);
+          //TODO: show error dialog
+        }
+      );
+  }
+
 }
 
 interface View {
@@ -121,4 +141,5 @@ interface View {
 interface Presenter {
   loginClicked(credentials: Credentials);
   signUpClicked();
+  googleLoginClicked();
 }
