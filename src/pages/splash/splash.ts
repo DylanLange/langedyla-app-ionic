@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MainPage } from '../main/main';
 import { delay } from '../../utils/utils';
 import { LoginPage } from '../login/login';
+import { AuthService } from '../../providers/auth-service';
 
 /**
  * Generated class for the SplashPage page.
@@ -16,14 +17,59 @@ import { LoginPage } from '../login/login';
   selector: 'page-splash',
   templateUrl: 'splash.html',
 })
-export class SplashPage {
+export class SplashPage implements View {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  presenter: Presenter;
+
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    auth: AuthService
+  ) {
+    this.presenter = new SplashPresenter(this, auth);
+  }
+
+  goToMain() {
+    this.navCtrl.setRoot(MainPage);
+  }
+
+  goToLogin() {
+    this.navCtrl.setRoot(LoginPage);
   }
 
   ionViewDidLoad() {
-    delay(1500)
-      .then(() => this.navCtrl.setRoot(LoginPage));
+    this.presenter.viewLoaded();
   }
 
+}
+
+export class SplashPresenter implements Presenter {
+
+  constructor(
+    private view: View,
+    private auth: AuthService
+  ) {
+
+  }
+
+  viewLoaded() {
+    delay(1500)
+      .then(() => {
+        if(this.auth.isSignedIn()) {
+          this.view.goToMain();
+        } else {
+          this.view.goToLogin();
+        }
+      });
+  }
+
+}
+
+interface View {
+  goToMain();
+  goToLogin();
+}
+
+interface Presenter {
+  viewLoaded();
 }

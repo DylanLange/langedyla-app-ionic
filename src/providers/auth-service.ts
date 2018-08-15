@@ -23,4 +23,12 @@ export class AuthService {
 		return this.afAuth.auth.createUserWithEmailAndPassword(credentials.email + "", credentials.password + "");
 	}
 
+	isSignedIn(): Boolean {
+		return this.user !== null;
+	}
+	
+	getUserEmail(): String {
+		return this.user && this.user.email;
+	}
+
 }
