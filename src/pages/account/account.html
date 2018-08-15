@@ -14,5 +14,9 @@
 
 
 <ion-content padding>
-	<p>This is the account screen</p>
+  <p *ngIf="auth.getUserEmail()"><b>Logged in as:\n\t</b>{{auth.getUserEmail()}}</p>
+    <button ion-button full (click)="logout()" *ngIf="auth.isSignedIn()">
+      <ion-icon name="log-out" item-left></ion-icon>
+      Log out
+    </button>
 </ion-content>
