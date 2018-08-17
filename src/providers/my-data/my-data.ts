@@ -4,6 +4,7 @@ import { Observable } from '../../../node_modules/rxjs/Observable';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/observable/fromPromise';
 import { Favourite } from '../../data/models/favourite';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 /*
   Generated class for the MyDataProvider provider.
@@ -14,14 +15,16 @@ import { Favourite } from '../../data/models/favourite';
 @Injectable()
 export class MyDataProvider {
 
-  favouritesStorageKey: string = "_1adwa3"
+  constructor(private storage: Storage, private auth: AngularFireAuth) {
+    
+  }
 
-  constructor(private storage: Storage) {
-    this.storage = storage;
+  getCurrentUserStorageKey(): string {
+    return "1jh21" + this.auth.auth.currentUser.email
   }
 
   getFavourites() : Promise<Favourite[]> {
-    return Observable.fromPromise(this.storage.get(this.favouritesStorageKey))
+    return Observable.fromPromise(this.storage.get(this.getCurrentUserStorageKey()))
       .map((favouritesJson) => {
         var result = JSON.parse(favouritesJson);
         if(result == null) result = [];
@@ -34,12 +37,10 @@ export class MyDataProvider {
   }
 
   setFavourites(favourites: Favourite[]) {
-    this.storage.set(this.favouritesStorageKey, JSON.stringify(favourites));
+    this.storage.set(this.getCurrentUserStorageKey(), JSON.stringify(favourites));
   }
 
   addToFavourites(newFavourite: Favourite): Promise<Boolean> {
-    console.log("adding new favourite: ");
-    console.log(newFavourite);
     return Observable.fromPromise(this.getFavourites())
       .map((favourites) => {
         this.setFavourites(favourites.concat([newFavourite]))
