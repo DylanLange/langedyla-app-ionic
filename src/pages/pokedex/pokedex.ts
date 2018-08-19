@@ -31,11 +31,9 @@ export class PokedexPage {
   presenter: Presenter;
 
   constructor(
-    private navCtrl: NavController,
-    private navParams: NavParams,
-    private pokemonServiceProvider: PokemonServiceProvider,
     private loadingCtrl: LoadingController,
-    private myDataProvider: MyDataProvider
+    pokemonServiceProvider: PokemonServiceProvider,
+    myDataProvider: MyDataProvider
   ) {
     this.presenter = new PokedexPresenter(this, pokemonServiceProvider, myDataProvider);
 

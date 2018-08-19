@@ -23,7 +23,6 @@ export class SplashPage implements View {
 
   constructor(
     private navCtrl: NavController, 
-    private navParams: NavParams,
     auth: AuthService
   ) {
     this.presenter = new SplashPresenter(this, auth);

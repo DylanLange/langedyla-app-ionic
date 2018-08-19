@@ -22,11 +22,9 @@ export class AccountPage implements View {
   presenter: Presenter;
 
   constructor(
-    private navCtrl: NavController,
-    private navParams: NavParams,
-    private auth: AuthService,
     private app: App,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private auth: AuthService
   ) {
     this.presenter = new AccountPresenter(this, auth);
   }

@@ -24,8 +24,7 @@ export class FavouritesPage implements View {
 
   constructor(
     private navCtrl: NavController,
-    private navParams: NavParams,
-    private myDataProvider: MyDataProvider
+    myDataProvider: MyDataProvider
   ) {
     this.presenter = new FavouritesPresenter(this, myDataProvider); 
   }

@@ -28,7 +28,6 @@ export class LoginPage implements View {
 
   constructor(
     private navCtrl: NavController,
-    private navParams: NavParams,
     private loadingCtrl: LoadingController,
     auth: AuthService,
     fb: FormBuilder
