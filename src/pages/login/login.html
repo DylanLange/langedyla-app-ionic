@@ -16,7 +16,7 @@
 			</ion-item>
 
 			<div ngxErrors="email" #emailErrors="ngxErrors">
-				<div [ngxError]="['email', 'required']" [when]="['touched', 'dirty']">It should be a valid email</div>
+				<div [ngxError]="['email', 'required']" [when]="['touched', 'dirty']">Invalid email</div>
 			</div>
 
 			<ion-item [ngClass]="{ invalid: passwordErrors.hasError('*', ['touched']) }">
@@ -24,7 +24,7 @@
 			</ion-item>
 
 			<div ngxErrors="password" #passwordErrors="ngxErrors">
-				<div [ngxError]="['minlength', 'required']" [when]="['touched']">It should be at least 5 characters</div>
+				<div [ngxError]="['minlength', 'required']" [when]="['touched']">Password should be at least 5 characters</div>
 			</div>
 		</ion-list>
 
